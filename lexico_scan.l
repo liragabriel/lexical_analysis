@@ -1,6 +1,3 @@
-// Gabriel Lira     RA: 20160378
-// Allan Rodrigues  RA: 
-
 %{
 #include <stdio.h>
 %}
