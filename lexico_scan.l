@@ -1,3 +1,6 @@
+// Gabriel Lira     RA: 20160378
+// Allan Rodrigues  RA: 
+
 %{
 #include <stdio.h>
 %}
@@ -7,30 +10,44 @@ NUM [0-9]+("."[0-9]+)?
 
 %%
 
+cos     {printf("TKN_COS: %s\n", yytext);}
+sen     {printf("TKN_SEN: %s\n", yytext);}
+"="     {printf("TKN_ATRIB: %s\n", yytext);}
+";"     {printf("TKN_PTOVIRGULA: %s\n", yytext);}
+"*"     {printf("TKN_MULT: %s\n", yytext);}
+"/"     {printf("TKN_DIV: %s\n", yytext);}
+"+"     {printf("TKN_MAIS: %s\n", yytext);}
+"-"     {printf("TKN_MENOS: %s\n", yytext);}
+"("     {printf("TKN_PAA: %s\n", yytext);}
+")"     {printf("TKN_PAF: %s\n", yytext);}
 {ID}+   {printf("TKN_ID: %s\n", yytext);}
 {NUM}+  {printf("TKN_NUM: %s\n", yytext);}
 
 %%
 
-void main(){
-    yylex();
+void lines() {
+    FILE *arquivo;
+    arquivo = fopen("palavras.txt", "r");
+
+    int lines = 0;
+    char c;
+
+    for (c = getc(arquivo); c != EOF; c = getc(arquivo))
+        if (c == '\n')
+            lines = lines + 1;
+    printf("\n%i linhas analisadas\n\n", lines+1);
 }
 
-// TKN_ID[a-zA-z][a-zA-Z0-9]*
-// TKN_NUM[0-9]+("."[0-9]+)?
-// TKN_COS"cos"
-// TKN_SEN"sen"
-// TKN_ATRIB"="
-// TKN_PTOVIRGULA";"
-// TKN_MULT"*"
-// TKN_DIV"/"
-// TKN_MAIS"+"
-// TKN_MENOS"-"
-// TKN_PAA"("
-// TKN_PAF")"
+int main() {
+    FILE *arquivo;
+    arquivo = fopen("palavras.txt", "r");
 
-// para compilar
-//     flex lexico_scan.l
-//     gcc lex.yy.c -o scanner -lfl -lm○
-// para rodar
-//     ./scanner
+    if ( arquivo != NULL ) {
+        yyin = arquivo;
+        lines();
+    }
+    else {
+	    yyin = stdin;
+    }
+    yylex();
+}
